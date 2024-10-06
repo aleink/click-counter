@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 20px; /* Reduced space to fit better on mobile */
+      padding: 0 10px;
+      color: #333;
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    button {
+      font-size: 22px;
+      font-weight: bold;
+      padding: 15px 50px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+      width: 80%; /* Button width optimized for mobile screens */
+      max-width: 300px; /* Prevent buttons from being too large on larger screens */
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    button:active {
+      background-color: #0056b3;
+    }
+
+    p {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin: 5px;
+    }
+
+    #customMessage {
+      font-size: 24px;
+      font-weight: bold;
+      color: #FF5733; /* Highlight the message color */
+      margin-top: 20px;
+      padding: 0 10px;
+    }
+  </style>
+  <script>
+    // Load the counts from localStorage (if available), otherwise initialize to 0
+    let yesCount = localStorage.getItem('yesCount') ? parseInt(localStorage.getItem('yesCount')) : 0;
+    let noCount = localStorage.getItem('noCount') ? parseInt(localStorage.getItem('noCount')) : 0;
+
+    function updateDisplay() {
+      const totalCount = yesCount + noCount;
+      const yesPercent = totalCount > 0 ? ((yesCount / totalCount) * 100).toFixed(2) : 0;
+      const noPercent = totalCount > 0 ? ((noCount / totalCount) * 100).toFixed(2) : 0;
+
+      document.getElementById("yesCount").innerText = `Yes Count: ${yesCount}`;
+      document.getElementById("noCount").innerText = `No Count: ${noCount}`;
+      document.getElementById("total").innerText = `Total: ${totalCount}`;
+      document.getElementById("percent").innerText = `Yes: ${yesPercent}% / No: ${noPercent}%`;
+
+      // Update custom message based on Yes percentage
+      updateCustomMessage(yesPercent);
+    }
+
+    function updateCustomMessage(yesPercent) {
+      let message = "";
+
+      if (yesPercent >= 80 && yesPercent <= 100) {
+        message = "SOMOS UNOS PINGUOS";
+      } else if (yesPercent >= 65 && yesPercent < 80) {
+        message = "SE VE BIEN PERO LA MANSION DEMORA";
+      } else {
+        message = "HABLALE BIEN A TU JEFE";
+      }
+
+      document.getElementById("customMessage").innerText = message;
+    }
+
+    function incrementYes() {
+      yesCount++;
+      localStorage.setItem('yesCount', yesCount);  // Store updated count in localStorage
+      updateDisplay();
+    }
+
+    function incrementNo() {
+      noCount++;
+      localStorage.setItem('noCount', noCount);  // Store updated count in localStorage
+      updateDisplay();
+    }
+
+    function resetCounts() {
+      yesCount = 0;
+      noCount = 0;
+      localStorage.setItem('yesCount', yesCount);  // Reset the counts in localStorage
+      localStorage.setItem('noCount', noCount);
+      updateDisplay();
+    }
+
+    // Run when the page loads
+    window.onload = function() {
+      updateDisplay();
+    };
+  </script>
+</head>
+<body>
+  <h1>HUELE BICHOS POR SIEMPRE</h1>
+
+  <div class="buttons-container">
+    <button onclick="incrementYes()">YES</button>
+    <button onclick="incrementNo()">NO</button>
+    <button onclick="resetCounts()">RESET</button>
+  </div>
+
+  <p id="yesCount">Yes Count: 0</p>
+  <p id="noCount">No Count: 0</p>
+  <p id="total">Total: 0</p>
+  <p id="percent">Yes: 0% / No: 0%</p>
+  
+  <p id="customMessage"></p> <!-- Custom message will appear here -->
+
+</body>
+</html>
